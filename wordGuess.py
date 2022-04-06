@@ -1,19 +1,38 @@
-"""
+
 remainingGuesses = 7
-guesses = empty set
-goalWord = list('Mississippi')
+guesses = set()
+specialChars = {'~','`','!','@','#','$','%','^','&','*','(',')','-','_',
+                '+','=','[',']','{','}','|','\\',':',';','\'','"','<','>',
+                ',','.','?','/', '1','2','3','4','5','6','7','8','9',}
+goalWord = 'Mississippi'
+goalWord = list(goalWord.lower())
 displayWord = ''
 winCondition = 0
+userInput = ''
 
-def checkInput(input)
-    If input is letter, return 1
-    Else if input is word, return 2
+#return 1 if single char, 2 if word, 3 if any special chars
+def getInput():         
+    global userInput 
+    userInput = input('Guess a letter or word: ')
 
+    if set(userInput) & specialChars != set():
+        return 3
 
+    userInput = userInput.lower()
+
+    if type(userInput) is str and len(userInput) == 1:
+        return 1
+    else:
+        return 2
+
+print(getInput())
+print(userInput)
+
+"""
 def getGuess()
-    Get user input, store in userInput
+    global userInput
 
-    if checkInput(userInput) is 1:
+    if getInput(userInput) is 1:
         if userInput is not in goalWord:
             subtract 1 from remainingGuesses
         else:
