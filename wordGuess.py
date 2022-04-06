@@ -1,36 +1,43 @@
 import random
 
-remainingGuesses = 7
-guesses = set()
 usedWords = set()
 specialChars = {'~','`','!','@','#','$','%','^','&','*','(',')','-','_',
                 '+','=','[',']','{','}','|','\\',':',';','\'','"','<','>',
                 ',','.','?','/', '1','2','3','4','5','6','7','8','9'}
 goalWord = ''
-winCondition = 0
-userInput = ''
+winCount = 0
+loseCount = 0
+willToPlay = 1
 
 file = open('words_alpha.txt')
 words = file.read().splitlines()
 file.close()
 
+def initializeGame():
+    global remainingGuesses
+    global guesses
+    global winCondition
+
+    remainingGuesses = 7
+    guesses = set()
+    winCondition = 0
+
+    chooseWord()
+
 #choose a random word, ensure it is new, make it into a list for easy iteration
 def chooseWord():
     global goalWord
     global usedWords
+    global goalWordList
 
     usedWords.add(goalWord)
 
     while goalWord in usedWords:
         goalWord = words[random.randrange(0, 370103)]       #there are 370103 words in words_alpha.txt
-        print("we got inside the while loop")
     
-    goalWord = list(goalWord)
+    goalWordList = list(goalWord)
 
-chooseWord()
-print("this is outside the while loop")
-print(goalWord)
-"""
+
 #return 1 if single letter, 2 if word, 0 if any special chars
 def getInput():         
     global userInput 
@@ -49,19 +56,19 @@ def getInput():
 #Check guess, adjust remainingGuesses and winCondition appropriately
 def doGuess():
     global userInput
-    global goalWord
+    global goalWordList
     global remainingGuesses
     global winCondition
 
     guessType = getInput()      #gets user input and stores whether it's a letter, word, or has illegal chars
     if guessType == 1:
-        if userInput not in goalWord:
+        if userInput not in goalWordList:
             remainingGuesses = remainingGuesses - 1
             print("That letter isn't in the word.")
         else:
             guesses.add(userInput)
     elif guessType == 2:
-        if list(userInput) == goalWord:
+        if list(userInput) == goalWordList:
             winCondition = 1
         else:
             print("Try again!")
@@ -69,25 +76,42 @@ def doGuess():
     else:
         print("Only letters or words allowed!")
 
-while remainingGuesses > 0:
-    doGuess()
-    displayWord = ''
+initializeGame()
 
-    for i in range(0,len(goalWord)):
-        if goalWord[i] in guesses:
-            displayWord = displayWord + goalWord[i]
+while 1:
+    if remainingGuesses != 0 and winCondition == 0:
+        doGuess()
+    displayWord = ''
+    playAgain = ''
+
+    for i in range(0,len(goalWordList)):            #This shows the word in progress based on previous guesses
+        if goalWordList[i] in guesses:
+            displayWord = displayWord + goalWordList[i]
         else:
             displayWord = displayWord + '_'
-    if list(displayWord) == goalWord:
+    if list(displayWord) == goalWordList:
         winCondition = 1
 
+    print("Letters you've guessed: %s" % displayWord)
+
     if winCondition == 1:
-        break
+        print("You won! You have %i win(s) and %i loss(es)" % (winCount+1, loseCount))
+        playAgain = input("Would you like to play again? y/n ")
+        if playAgain == 'y':
+            initializeGame()
+            winCount = winCount + 1
+        elif playAgain == 'n':
+            break
 
-    print("The word so far: %s" % displayWord)
+    if remainingGuesses == 0:
+        print("You lost! You have %i win(s) and %i loss(es)" % (winCount, loseCount+1))
+        print("The word was %s " % goalWord)
+        playAgain = input("Would you like to play again? y/n ")
+        if playAgain == 'y':
+            initializeGame()
+            loseCount = loseCount + 1
+        elif playAgain == 'n':
+            break
 
-if winCondition == 1:
-    print("You won!")
-else:
-    print("You're out of guesses, you lost!")
-"""
+
+print("Thanks for playing!")
