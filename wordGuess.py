@@ -35,6 +35,7 @@ def doGuess():
     if guessType == 1:
         if userInput not in goalWord:
             remainingGuesses = remainingGuesses - 1
+            print("That letter isn't in the word.")
         else:
             guesses.add(userInput)
     elif guessType == 2:
@@ -46,30 +47,24 @@ def doGuess():
     else:
         print("Only letters or words allowed!")
 
-"""
-doGuess()
-print("Did you win? %s" % winCondition)
-print("Guesses remaining: %s" % remainingGuesses)
-
-
 while remainingGuesses > 0:
     doGuess()
     displayWord = ''
 
-    for i in length of goalWord:
-        if goalWord[i] is in guesses:
-            add goalWord[i] to displayWord
+    for i in range(0,len(goalWord)):
+        if goalWord[i] in guesses:
+            displayWord = displayWord + goalWord[i]
         else:
-            add '_' to displayWord
-    
-    if winCondition is 1:
+            displayWord = displayWord + '_'
+    if list(displayWord) == goalWord:
+        winCondition = 1
+
+    if winCondition == 1:
         break
 
-    print displayWord
+    print("The word so far: %s" % displayWord)
 
-if winCondition is 1:
-    print "You won!"
+if winCondition == 1:
+    print("You won!")
 else:
-    print "You're out of guesses, you lost!"
-
-"""
+    print("You're out of guesses, you lost!")
