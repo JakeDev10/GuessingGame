@@ -6,17 +6,16 @@ specialChars = {'~','`','!','@','#','$','%','^','&','*','(',')','-','_',
                 ',','.','?','/', '1','2','3','4','5','6','7','8','9',}
 goalWord = 'Mississippi'
 goalWord = list(goalWord.lower())
-displayWord = ''
 winCondition = 0
 userInput = ''
 
-#return 1 if single char, 2 if word, 3 if any special chars
+#return 1 if single letter, 2 if word, 0 if any special chars
 def getInput():         
     global userInput 
     userInput = input('Guess a letter or word: ')
 
     if set(userInput) & specialChars != set():
-        return 3
+        return 0
 
     userInput = userInput.lower()
 
@@ -25,29 +24,36 @@ def getInput():
     else:
         return 2
 
-print(getInput())
-print(userInput)
+#Check guess, adjust remainingGuesses and winCondition appropriately
+def doGuess():
+    global userInput
+    global goalWord
+    global remainingGuesses
+    global winCondition
+
+    guessType = getInput()      #gets user input and stores whether it's a letter, word, or has illegal chars
+    if guessType == 1:
+        if userInput not in goalWord:
+            remainingGuesses = remainingGuesses - 1
+        else:
+            guesses.add(userInput)
+    elif guessType == 2:
+        if list(userInput) == goalWord:
+            winCondition = 1
+        else:
+            print("Try again!")
+            remainingGuesses = remainingGuesses -1
+    else:
+        print("Only letters or words allowed!")
 
 """
-def getGuess()
-    global userInput
+doGuess()
+print("Did you win? %s" % winCondition)
+print("Guesses remaining: %s" % remainingGuesses)
 
-    if getInput(userInput) is 1:
-        if userInput is not in goalWord:
-            subtract 1 from remainingGuesses
-        else:
-            add userInput to guesses
-    else if checkInput(userInput) is 2:
-        If userInput matches goalword:
-            set winCondition to 1
-        else:
-            print "Try again!"
-            Subtract 1 from remainingGuesses
-    else:
-        print "Only letters or words allowed!"
 
 while remainingGuesses > 0:
-    getGuess()
+    doGuess()
     displayWord = ''
 
     for i in length of goalWord:
