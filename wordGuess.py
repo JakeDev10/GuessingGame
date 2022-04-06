@@ -1,14 +1,36 @@
+import random
 
 remainingGuesses = 7
 guesses = set()
+usedWords = set()
 specialChars = {'~','`','!','@','#','$','%','^','&','*','(',')','-','_',
                 '+','=','[',']','{','}','|','\\',':',';','\'','"','<','>',
-                ',','.','?','/', '1','2','3','4','5','6','7','8','9',}
-goalWord = 'Mississippi'
-goalWord = list(goalWord.lower())
+                ',','.','?','/', '1','2','3','4','5','6','7','8','9'}
+goalWord = ''
 winCondition = 0
 userInput = ''
 
+file = open('words_alpha.txt')
+words = file.read().splitlines()
+file.close()
+
+#choose a random word, ensure it is new, make it into a list for easy iteration
+def chooseWord():
+    global goalWord
+    global usedWords
+
+    usedWords.add(goalWord)
+
+    while goalWord in usedWords:
+        goalWord = words[random.randrange(0, 370103)]       #there are 370103 words in words_alpha.txt
+        print("we got inside the while loop")
+    
+    goalWord = list(goalWord)
+
+chooseWord()
+print("this is outside the while loop")
+print(goalWord)
+"""
 #return 1 if single letter, 2 if word, 0 if any special chars
 def getInput():         
     global userInput 
@@ -68,3 +90,4 @@ if winCondition == 1:
     print("You won!")
 else:
     print("You're out of guesses, you lost!")
+"""
