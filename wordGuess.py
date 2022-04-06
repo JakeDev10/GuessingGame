@@ -7,7 +7,6 @@ specialChars = {'~','`','!','@','#','$','%','^','&','*','(',')','-','_',
 goalWord = ''
 winCount = 0
 loseCount = 0
-willToPlay = 1
 
 file = open('words_alpha.txt')
 words = file.read().splitlines()
@@ -24,7 +23,7 @@ def initializeGame():
 
     chooseWord()
 
-#choose a random word, ensure it is new, make it into a list for easy iteration
+#choose a random word, ensure it is new
 def chooseWord():
     global goalWord
     global usedWords
@@ -36,7 +35,6 @@ def chooseWord():
         goalWord = words[random.randrange(0, 370103)]       #there are 370103 words in words_alpha.txt
     
     goalWordList = list(goalWord)
-
 
 #return 1 if single letter, 2 if word, 0 if any special chars
 def getInput():         
@@ -55,8 +53,6 @@ def getInput():
 
 #Check guess, adjust remainingGuesses and winCondition appropriately
 def doGuess():
-    global userInput
-    global goalWordList
     global remainingGuesses
     global winCondition
 
@@ -92,10 +88,9 @@ while 1:
     if list(displayWord) == goalWordList:
         winCondition = 1
 
-    print("Letters you've guessed: %s" % displayWord)
-
+    print(f"The word so far: {displayWord} Guesses remaining: {remainingGuesses}")
     if winCondition == 1:
-        print("You won! You have %i win(s) and %i loss(es)" % (winCount+1, loseCount))
+        print(f"You won! You have {winCount+1} win(s) and {loseCount} loss(es)")
         playAgain = input("Would you like to play again? y/n ")
         if playAgain == 'y':
             initializeGame()
@@ -104,7 +99,7 @@ while 1:
             break
 
     if remainingGuesses == 0:
-        print("You lost! You have %i win(s) and %i loss(es)" % (winCount, loseCount+1))
+        print(f"You lost! You have {winCount} win(s) and {loseCount+1} loss(es)")
         print("The word was %s " % goalWord)
         playAgain = input("Would you like to play again? y/n ")
         if playAgain == 'y':
